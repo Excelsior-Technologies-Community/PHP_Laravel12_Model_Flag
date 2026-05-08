@@ -4,122 +4,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Posts</title>
+    <title>Laravel Model Flags Dashboard</title>
+
     <style>
-        /* ---------- GENERAL STYLES ---------- */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
-            color: #333;
+        * {
             margin: 0;
-            padding: 0 20px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            padding: 30px;
+            color: #333;
         }
 
         h1 {
             text-align: center;
-            margin: 40px 0 20px 0;
+            margin-bottom: 30px;
             color: #1e3a8a;
-            font-size: 2.5rem;
+            font-size: 38px;
         }
 
-        /* ---------- FORM STYLING ---------- */
-        form {
-            max-width: 800px;
-            margin: 0 auto 40px auto;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        /* ---------- STATS ---------- */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 35px;
         }
 
-        input[type="text"] {
-            flex: 1 1 200px;
-            padding: 12px 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1rem;
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
             transition: 0.3s;
         }
 
-        input[type="text"]:focus {
-            border-color: #1e3a8a;
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            font-size: 32px;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 15px;
+        }
+
+        /* ---------- SUCCESS ---------- */
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* ---------- FORM ---------- */
+
+        form {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        input[type=text] {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 15px;
+        }
+
+        input[type=text]:focus {
             outline: none;
+            border-color: #2563eb;
+        }
+
+        .checkboxes {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .checkboxes label {
+            background: #f3f4f6;
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
         }
 
         button {
-            padding: 12px 25px;
+            padding: 14px 28px;
             border: none;
-            border-radius: 8px;
-            background: #1e3a8a;
-            color: #fff;
-            font-weight: 600;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
             cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
             transition: 0.3s;
         }
 
         button:hover {
-            background: #3b82f6;
+            background: #1d4ed8;
         }
 
-        /* ---------- POSTS GRID ---------- */
-        .posts-container {
+        /* ---------- FILTERS ---------- */
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 35px;
+        }
+
+        .filters a {
+            text-decoration: none;
+            background: white;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #333;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .filters a:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* ---------- POSTS ---------- */
+
+        .posts {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 22px;
         }
 
-        .post-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
+        .post {
+            background: white;
+            padding: 22px;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            transition: 0.3s;
         }
 
-        .post-card:hover {
+        .post:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
         }
 
-        .post-card h2 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
+        .post h2 {
+            margin-bottom: 12px;
             color: #111827;
         }
 
-        .post-card p {
-            font-size: 1rem;
-            margin-bottom: 15px;
-            color: #4b5563;
+        .post p {
+            margin-bottom: 18px;
+            line-height: 1.6;
+            color: #555;
         }
 
-        /* ---------- FLAGS BADGES ---------- */
-        .flags {
+        /* ---------- BADGES ---------- */
+
+        .badge {
             display: inline-block;
-            background: #10b981;
-            color: #fff;
-            font-size: 0.8rem;
-            padding: 3px 10px;
-            border-radius: 9999px;
-            /* pill shape */
-            margin-right: 5px;
-            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 30px;
+            color: white;
+            font-size: 12px;
+            margin-right: 6px;
+            margin-bottom: 10px;
             text-transform: capitalize;
+            font-weight: 600;
+        }
+
+        .featured {
+            background: #f59e0b;
+        }
+
+        .published {
+            background: #10b981;
+        }
+
+        .trending {
+            background: #ef4444;
+        }
+
+        .archived {
+            background: #6b7280;
+        }
+
+        /* ---------- ACTIONS ---------- */
+
+        .actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .actions a {
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .actions a:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* ---------- EMPTY ---------- */
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
         }
 
         /* ---------- RESPONSIVE ---------- */
-        @media (max-width: 600px) {
-            form {
+
+        @media(max-width:768px) {
+
+            body {
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .checkboxes {
                 flex-direction: column;
             }
 
-            input[type="text"],
             button {
                 width: 100%;
             }
@@ -129,27 +271,177 @@
 
 <body>
 
-    <h1>All Posts</h1>
+    <h1>Laravel Model Flags Dashboard</h1>
+
+    @if(session('success'))
+        <div class="success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <!-- STATS -->
+
+
+<div class="stats">
+
+    <div class="card">
+        <h2>{{ \App\Models\Post::count() }}</h2>
+        <p>Total Posts</p>
+    </div>
+
+    <div class="card">
+        <h2>
+            {{
+                \App\Models\Post::all()
+                ->filter(fn($post) => $post->hasFlag('featured'))
+                ->count()
+            }}
+        </h2>
+        <p>Featured Posts</p>
+    </div>
+
+    <div class="card">
+        <h2>
+            {{
+                \App\Models\Post::all()
+                ->filter(fn($post) => $post->hasFlag('trending'))
+                ->count()
+            }}
+        </h2>
+        <p>Trending Posts</p>
+    </div>
+
+    <div class="card">
+        <h2>
+            {{
+                \App\Models\Post::all()
+                ->filter(fn($post) => $post->hasFlag('published'))
+                ->count()
+            }}
+        </h2>
+        <p>Published Posts</p>
+    </div>
+
+</div>
+
+    <!-- FORM -->
 
     <form action="/posts" method="POST">
+
         @csrf
-        <input type="text" name="title" placeholder="Title" required>
-        <input type="text" name="content" placeholder="Content" required>
-        <button type="submit">Create Post</button>
+
+        <input type="text" name="title" placeholder="Enter post title" required>
+
+        <input type="text" name="content" placeholder="Enter post content" required>
+
+        <div class="checkboxes">
+
+            <label>
+                <input type="checkbox" name="featured">
+                Featured
+            </label>
+
+            <label>
+                <input type="checkbox" name="published">
+                Published
+            </label>
+
+            <label>
+                <input type="checkbox" name="trending">
+                Trending
+            </label>
+
+            <label>
+                <input type="checkbox" name="archived">
+                Archived
+            </label>
+
+        </div>
+
+        <button type="submit">
+            Create Post
+        </button>
+
     </form>
 
-    <div class="posts-container">
-        @foreach ($posts as $post)
-            <div class="post-card">
+    <!-- FILTERS -->
+
+    <div class="filters">
+
+        <a href="/">All Posts</a>
+
+        <a href="/?flag=featured">
+            Featured
+        </a>
+
+        <a href="/?flag=published">
+            Published
+        </a>
+
+        <a href="/?flag=trending">
+            Trending
+        </a>
+
+        <a href="/?flag=archived">
+            Archived
+        </a>
+
+    </div>
+
+    <!-- POSTS -->
+
+    <div class="posts">
+
+        @forelse($posts as $post)
+
+            <div class="post">
+
                 <h2>{{ $post->title }}</h2>
+
                 <p>{{ $post->content }}</p>
+
                 <div>
+
                     @foreach($post->flags as $flag)
-                        <span class="flags">{{ $flag->name }}</span>
+
+                        <span class="badge {{ $flag->name }}">
+                            {{ $flag->name }}
+                        </span>
+
                     @endforeach
+
                 </div>
+
+                <div class="actions">
+
+                    <a href="/toggle/{{ $post->id }}/featured">
+                        Toggle Featured
+                    </a>
+
+                    <a href="/toggle/{{ $post->id }}/published">
+                        Toggle Published
+                    </a>
+
+                    <a href="/toggle/{{ $post->id }}/trending">
+                        Toggle Trending
+                    </a>
+
+                    <a href="/toggle/{{ $post->id }}/archived">
+                        Toggle Archived
+                    </a>
+
+                </div>
+
             </div>
-        @endforeach
+
+        @empty
+
+            <div class="empty">
+                <h2>No Posts Found</h2>
+            </div>
+
+        @endforelse
+
     </div>
 
 </body>
