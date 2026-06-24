@@ -12,21 +12,18 @@ class Post extends Model
 
     protected $fillable = ['title', 'content'];
 
-    protected $casts = [
-        'flags' => 'array',
-    ];
-
+    
     public function flags()
     {
-        return $this->hasMany(PostFlag::class);
+        return $this->morphMany(PostFlag::class, 'flaggable');
     }
 
-    public function flag($name)
+    public function flag($name, $reason = 'other') 
     {
         if (!$this->hasFlag($name)) {
-            PostFlag::create([
-                'post_id' => $this->id,
+            $this->flags()->create([
                 'name' => $name,
+                'reason' => $reason,
             ]);
         }
         return $this;
@@ -34,19 +31,12 @@ class Post extends Model
 
     public function unflag($name)
     {
-        PostFlag::where('post_id', $this->id)
-            ->where('name', $name)
-            ->delete();
+        $this->flags()->where('name', $name)->delete();
         return $this;
     }
 
     public function hasFlag($name)
     {
         return $this->flags->contains('name', $name);
-    }
-
-    public function getFlagsListAttribute()
-    {
-        return $this->flags->pluck('name')->toArray();
     }
 }

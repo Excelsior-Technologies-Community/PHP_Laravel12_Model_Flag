@@ -3,13 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class PostFlag extends Model
 {
-    protected $fillable = ['post_id', 'name'];
+    protected $table = 'flags';
 
-    public function post()
+    protected $fillable = ['name', 'reason', 'flaggable_id', 'flaggable_type'];
+
+   
+    public function flaggable(): MorphTo
     {
-        return $this->belongsTo(Post::class);
+        return $this->morphTo();
     }
 }

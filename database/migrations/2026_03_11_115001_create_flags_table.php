@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('name');
+            $table->string('reason')->default('other');
             $table->morphs('flaggable');
 
             $table->index(['name', 'flaggable_id', 'flaggable_type']);
